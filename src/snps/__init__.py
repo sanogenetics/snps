@@ -656,14 +656,17 @@ class SNPs:
                 sex_x = snps_df._determine_sex_X(heterozygous_x_snps_threshold)
                 sex_y = snps_df._determine_sex_Y(y_snps_not_null_threshold)
 
-                if sex_y == "" and sex_x != "":
+                if not sex_y and sex_x:
+                    # Y unclear, use X
                     return sex_x
-                elif sex_y != "" and sex_x == "":
+                elif sex_y and not sex_x:
+                    # X unclear, use Y
                     return sex_y
                 elif sex_y == sex_x:
+                    # X and Y agree (either both male, both female, or both unknown)
                     return sex_y
                 else:
-                    # if X and Y disagree and are not unknown
+                    # X is male and Y is female, or visa versa
                     return ""
         return ""
 
