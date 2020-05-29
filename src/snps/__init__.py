@@ -142,7 +142,7 @@ class SNPs:
                     self._build_detected = True
 
                 if deduplicate_XY_chrom:
-                    if self.determine_sex() == "Male":
+                    if self.sex == "Male":
                         self._deduplicate_XY_chrom()
 
                 if assign_par_snps:
@@ -270,9 +270,7 @@ class SNPs:
         str
             'Male' or 'Female' if detected, else empty str
         """
-        sex = self.determine_sex(chrom="X")
-        if not sex:
-            sex = self.determine_sex(chrom="Y")
+        sex = self.determine_sex(chrom="XY")
         return sex
 
     @property
@@ -641,8 +639,8 @@ class SNPs:
             percentage heterozygous X SNPs; above this threshold, Female is determined
         y_snps_not_null_threshold : float
             percentage Y SNPs that are not null; above this threshold, Male is determined
-        chrom : {"X", "Y"}
-            use X or Y chromosome SNPs to determine sex
+        chrom : {"X", "Y", "XY}
+            use X or Y or both chromosome SNPs to determine sex
 
         Returns
         -------
@@ -654,6 +652,19 @@ class SNPs:
                 return self._determine_sex_X(heterozygous_x_snps_threshold)
             elif chrom == "Y":
                 return self._determine_sex_Y(y_snps_not_null_threshold)
+            elif chrom == "XY":
+                sex_x = snps_df._determine_sex_X(heterozygous_x_snps_threshold)
+                sex_y = snps_df._determine_sex_Y(y_snps_not_null_threshold)
+
+                if sex_y == "" and sex_x != "":
+                    return sex_x
+                elif sex_y != "" and sex_x == "":
+                    return sex_y
+                elif sex_y == sex_x:
+                    return sex_y
+                else:
+                    # if X and Y disagree and are not unknown
+                    return ""
         return ""
 
     def _determine_sex_X(self, threshold):
