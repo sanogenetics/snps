@@ -653,8 +653,8 @@ class SNPs:
             elif chrom == "Y":
                 return self._determine_sex_Y(y_snps_not_null_threshold)
             elif chrom == "XY":
-                sex_x = snps_df._determine_sex_X(heterozygous_x_snps_threshold)
-                sex_y = snps_df._determine_sex_Y(y_snps_not_null_threshold)
+                sex_x = self._determine_sex_X(heterozygous_x_snps_threshold)
+                sex_y = self._determine_sex_Y(y_snps_not_null_threshold)
 
                 if not sex_y and sex_x:
                     # Y unclear, use X
