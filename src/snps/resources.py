@@ -86,6 +86,9 @@ class Resources(metaclass=Singleton):
         self._dbsnp_151_37_reverse = {}
         self._opensnp_datadump_filenames = []
 
+    def __repr__(self):
+        return "Resources("+str(self._resources_dir)+")"
+
     def get_reference_sequences(
         self,
         assembly="GRCh37",
@@ -681,7 +684,8 @@ class Resources(metaclass=Singleton):
 
         destination = os.path.join(self._resources_dir, filename)
 
-        if not create_dir(os.path.relpath(os.path.dirname(destination))):
+        # filename may include some directory
+        if not create_dir(os.path.dirname(destination)):
             return ""
 
         if not os.path.exists(destination):
