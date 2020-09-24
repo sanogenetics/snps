@@ -401,7 +401,8 @@ class SNPs:
         )
 
     def _read_raw_data(self, file, only_detect_source, rsids):
-        return Reader.read_file(file, only_detect_source, self._resources, rsids)
+        resources = self._resources  # use a temporary variable for easier debugging
+        return Reader.read_file(file, only_detect_source, resources, rsids)
 
     def _assign_par_snps(self):
         """ Assign PAR SNPs to the X or Y chromosome using SNP position.
