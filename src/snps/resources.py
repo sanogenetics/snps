@@ -79,7 +79,7 @@ class Resources(metaclass=Singleton):
         resources_dir : str
             name / path of resources directory
         """
-        self._resources_dir = os.path.abspath(resources_dir)
+        self._resources_dir = resources_dir
         self._ensembl_rest_client = EnsemblRestClient()
         self._reference_sequences = {}
         self._gsa_resources = {}
